@@ -1,31 +1,93 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-<title>CSKT PurpleAir Network</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSKT PurpleAir Network</title>
+    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 
 <body>
-    
-<iframe src="https://map.purpleair.com/1/b/i/lt/mAQI/a10/p3600/cC0#8.77/47.518/-114.3514">
-    Your browser doesn't support iframes
-</iframe>
-    
-<style>
-    iframe {
-        position: fixed; 
-        width:100vw; 
-        height:100vh; 
-        border:none; 
-        margin:0; 
-        padding:0; 
-        overflow:hidden; 
-        z-index:999999;
-    }
-    
-    body {
-    margin: 0;
-}
-</style>
+    <script>
+        function populateDropdown(data) {
+            const dropdown = document.getElementById('dropdown');
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item['URL'];
+                option.textContent = item['Station ID'];
+                dropdown.appendChild(option);
+            });
+
+            dropdown.addEventListener('change', function() {
+                var selectedUrl;
+                if (dropdown.value === '') {
+                    selectedUrl = "https://map.purpleair.com/1/b/i/lt/mAQI/a10/p3600/cC0#8.77/47.518/-114.3514";
+                } else {
+                    selectedUrl = dropdown.value;
+                }
+                const iframe = document.getElementById('display');
+
+                iframe.src = selectedUrl;
+            });
+        }
+        Papa.parse("https://raw.githubusercontent.com/mt-climate-office/cskt-air-quality/main/sensor_urls.csv", {
+            header: true,
+            download: true,
+            complete: function(results) {
+                populateDropdown(results.data);
+            }
+        })
+    </script>
+
+
+
+    <div id="iframeContainer">
+        <select id="dropdown">
+            <option value="">Select a CSKT PurpleAir Monitor...</option>
+        </select>
+        <iframe id='display' src="https://map.purpleair.com/1/b/i/lt/mAQI/a10/p3600/cC0#8.77/47.518/-114.3514">
+            Your browser doesn't support iframes
+        </iframe>
+    </div>
+
+        
+    <style>
+
+        #iframeContainer {
+            position: fixed; 
+            width:100vw; 
+            height:100vh; 
+            border:none; 
+            margin:0; 
+            padding:0; 
+            overflow:hidden; 
+            z-index:999999;
+        }
+
+        #display {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #dropdown {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            margin: 0;
+        }
+    </style>
 
 </body>
 </html>
