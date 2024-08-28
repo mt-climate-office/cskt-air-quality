@@ -108,19 +108,26 @@
                     { data: 'pm25' }
                 ],
                 rowCallback: function(row, data, index) {
-                    // Debugging: Log date values
-                    console.log('Last Seen:', data.last_seen_date);
-                    
                     const now = new Date();
                     const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
 
                     // Check if the sensor hasn't reported in the last 30 minutes
                     if (now - data.last_seen_date > halfHour) {
-                      console.log('Highlighting row:', data.sensor_index);
-                      console.log('Difference:', now - data.last_seen_date);
-                        $(row).addClass('highlight-red');
-                        //$(row).css('background-color', '#f8d7da');
+                        // Apply the style to the row
+                        $(row).css('background-color', '#f8d7da');
                     }
+                },
+                drawCallback: function(settings) {
+                    // Ensure that the rowCallback function is applied after sorting
+                    this.api().rows().every(function(rowIdx, tableLoop, rowLoop) {
+                        const rowData = this.data();
+                        const now = new Date();
+                        const halfHour = 30 * 60 * 1000;
+
+                        if (now - rowData.last_seen_date > halfHour) {
+                            $(this.node()).css('background-color', '#f8d7da');
+                        }
+                    });
                 }
             });
         })
