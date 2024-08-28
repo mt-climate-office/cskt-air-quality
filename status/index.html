@@ -14,6 +14,7 @@
 <table id="sensorTable" class="display" style="width:100%">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Name</th>
             <th>Location Type</th>
             <th>Latitude</th>
@@ -36,20 +37,22 @@
         .then(response => response.json())
         .then(data => {
             const tableData = data.data.map(sensor => ({
-                name: sensor[0],
-                location_type: sensor[1] === 0 ? "outside" : "inside",
-                latitude: sensor[2],
-                longitude: sensor[3],
-                altitude: sensor[4],
-                model: sensor[5],
-                firmware_version: sensor[6],
-                last_seen: new Date(sensor[7] * 1000).toLocaleString("en-US", { timeZone: "America/Denver" }),
-                pm25: sensor[8]
+                sensor_index: sensor[0],
+                last_seen: new Date(sensor[1] * 1000).toLocaleString("en-US", { timeZone: "America/Denver" }),
+                name: sensor[2],
+                location_type: sensor[3] === 0 ? "outside" : "inside",
+                model: sensor[4],
+                firmware_version: sensor[5],
+                latitude: sensor[6],
+                longitude: sensor[7],
+                altitude: sensor[8],
+                pm25: sensor[9]
             }));
 
             $('#sensorTable').DataTable({
                 data: tableData,
                 columns: [
+                    { data: 'sensor_index' },
                     { data: 'name' },
                     { data: 'location_type' },
                     { data: 'latitude' },
