@@ -81,7 +81,7 @@
                     // Check if the sensor hasn't reported in the last 30 minutes
                     if (now - data.last_seen_date > halfHour) {
                       console.log('Difference:', now - data.last_seen_date);
-                        $(row).addClass('highlight-red');
+                        $(row).css('background-color', '#f8d7da');
                     }
                 }
             });
