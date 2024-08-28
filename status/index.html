@@ -39,18 +39,23 @@
         fetch('https://c36nxc3vd0.execute-api.us-west-2.amazonaws.com/prod/sensor-data')
         .then(response => response.json())
         .then(data => {
-            const tableData = data.data.map(sensor => ({
-                sensor_index: sensor[0],
-                last_seen: new Date(sensor[1] * 1000).toLocaleString("en-US", { timeZone: "America/Denver" }),
-                name: sensor[2],
-                location_type: sensor[3] === 0 ? "outside" : "inside",
-                model: sensor[4],
-                firmware_version: sensor[5],
-                latitude: sensor[6],
-                longitude: sensor[7],
-                altitude: sensor[8],
-                pm25: sensor[9]
-            }));
+            // Map API response data to table format
+            const tableData = data.data.map(sensor => {
+                const lastSeenDate = new Date(sensor[1] * 1000); // Assuming the timestamp is in seconds
+                return {
+                    sensor_index: sensor[0],
+                    last_seen: lastSeenDate.toLocaleString("en-US", { timeZone: "America/Denver" }),
+                    name: sensor[2],
+                    location_type: sensor[3] === 0 ? "outside" : "inside",
+                    model: sensor[4],
+                    firmware_version: sensor[5],
+                    latitude: sensor[6],
+                    longitude: sensor[7],
+                    altitude: sensor[8],
+                    pm25: sensor[9],
+                    last_seen_date: lastSeenDate // Raw date object for comparison
+                };
+            });
 
             $('#sensorTable').DataTable({
                 data: tableData,
@@ -67,12 +72,14 @@
                     { data: 'pm25' }
                 ],
                 rowCallback: function(row, data, index) {
-                    const lastSeenDate = new Date(data.last_seen);
+                    // Debugging: Log date values
+                    console.log('Last Seen:', data.last_seen_date);
+                    
                     const now = new Date();
                     const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
 
                     // Check if the sensor hasn't reported in the last 30 minutes
-                    if (now - lastSeenDate > halfHour) {
+                    if (now - data.last_seen_date > halfHour) {
                         $(row).addClass('highlight-red');
                     }
                 }
