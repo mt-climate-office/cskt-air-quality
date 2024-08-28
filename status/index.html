@@ -1,31 +1,92 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>CSKT PurpleAir Network Status</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Data</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
-
 <body>
-    
-<iframe src="https://map.purpleair.com/1/b/i/lt/mAQI/a10/p3600/cC0#8.77/47.518/-114.3514">
-    Your browser doesn't support iframes
-</iframe>
-    
-<style>
-    iframe {
-        position: fixed; 
-        width:100vw; 
-        height:100vh; 
-        border:none; 
-        margin:0; 
-        padding:0; 
-        overflow:hidden; 
-        z-index:999999;
-    }
-    
-    body {
-    margin: 0;
-}
-</style>
+
+<h1>Sensor Data</h1>
+<table id="sensorTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location Type</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Altitude</th>
+            <th>Model</th>
+            <th>Firmware Version</th>
+            <th>Last Seen</th>
+            <th>PM2.5</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const apiKey = '7200E858-657A-11EF-95CB-42010A80000E';
+        const queryFields = [
+            "name",
+            "location_type",
+            "latitude",
+            "longitude",
+            "altitude",
+            "model",
+            "firmware_version",
+            "last_seen",
+            "pm2.5"
+        ];
+        const sensors = [
+            190203, 190189, 176181, 176173, 176203, 176155, 190325, 190197, 
+            212487, 176179, 176197, 176157, 190195, 212833, 212849, 176231, 
+            176149, 212459, 176175, 176185, 190185, 190217, 212455, 190199, 
+            176253, 176251, 176177, 176207, 190211, 212855, 176183, 212697
+        ];
+
+        fetch(`https://api.purpleair.com/v1/sensors?fields=${queryFields.join(',')}&show_only=${sensors.join(',')}`, {
+            method: 'GET',
+            headers: {
+                'X-API-Key': apiKey
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const tableData = data.data.map(sensor => ({
+                name: sensor[0],
+                location_type: sensor[1] === 0 ? "outside" : "inside",
+                latitude: sensor[2],
+                longitude: sensor[3],
+                altitude: sensor[4],
+                model: sensor[5],
+                firmware_version: sensor[6],
+                last_seen: new Date(sensor[7] * 1000).toLocaleString("en-US", { timeZone: "America/Denver" }),
+                pm25: sensor[8]
+            }));
+
+            $('#sensorTable').DataTable({
+                data: tableData,
+                columns: [
+                    { data: 'name' },
+                    { data: 'location_type' },
+                    { data: 'latitude' },
+                    { data: 'longitude' },
+                    { data: 'altitude' },
+                    { data: 'model' },
+                    { data: 'firmware_version' },
+                    { data: 'last_seen' },
+                    { data: 'pm25' }
+                ]
+            });
+        })
+        .catch(error => console.error('Error fetching sensor data:', error));
+    });
+</script>
 
 </body>
 </html>
