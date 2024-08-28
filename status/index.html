@@ -59,6 +59,13 @@
 
             $('#sensorTable').DataTable({
                 data: tableData,
+                responsive: true,
+                fixedHeader: true,
+                paging: false,
+                info: false,
+                language: {
+                        search: ''
+                    },
                 columns: [
                     { data: 'sensor_index' },
                     { data: 'name' },
@@ -80,6 +87,7 @@
 
                     // Check if the sensor hasn't reported in the last 30 minutes
                     if (now - data.last_seen_date > halfHour) {
+                      console.log('Highlighting row:', data.sensor_index);
                       console.log('Difference:', now - data.last_seen_date);
                         $(row).css('background-color', '#f8d7da');
                     }
