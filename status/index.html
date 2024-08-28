@@ -22,8 +22,16 @@
 
     <style>
         body, html {
-            height: 100%;
             margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #fff;
+            position: relative;
+            padding-bottom: 220px !important;
+            height: auto !important;
+            min-height: 100%;
+            box-sizing: border-box;
+            -webkit-font-smoothing: inherit;
             font-family: 'Open Sans', sans-serif;
         }
         table.dataTable {
@@ -31,6 +39,9 @@
         }
         .highlight {
             background-color: #f8d7da !important;
+        }
+        .dataTables_filter {
+            float: left !important;
         }
     </style>
 </head>
@@ -76,7 +87,9 @@
                 };
             });
 
-            $('#sensorTable').DataTable({
+            $('#sensorTable').
+                .addClass('nowrap')
+                .DataTable({
                 data: tableData,
                 columns: [
                     { data: 'sensor_index' },
