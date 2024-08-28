@@ -30,31 +30,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const apiKey = '7200E858-657A-11EF-95CB-42010A80000E';
-        const queryFields = [
-            "name",
-            "location_type",
-            "latitude",
-            "longitude",
-            "altitude",
-            "model",
-            "firmware_version",
-            "last_seen",
-            "pm2.5"
-        ];
-        const sensors = [
-            190203, 190189, 176181, 176173, 176203, 176155, 190325, 190197, 
-            212487, 176179, 176197, 176157, 190195, 212833, 212849, 176231, 
-            176149, 212459, 176175, 176185, 190185, 190217, 212455, 190199, 
-            176253, 176251, 176177, 176207, 190211, 212855, 176183, 212697
-        ];
+       
 
-        fetch(`https://api.purpleair.com/v1/sensors?fields=${queryFields.join(',')}&show_only=${sensors.join(',')}`, {
-            method: 'GET',
-            headers: {
-                'X-API-Key': apiKey
-            }
-        })
+        fetch('https://c36nxc3vd0.execute-api.us-west-2.amazonaws.com/prod/sensor-data')
         .then(response => response.json())
         .then(data => {
             const tableData = data.data.map(sensor => ({
