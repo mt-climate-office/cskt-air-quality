@@ -36,7 +36,6 @@
 </head>
 <body>
 
-<h1>Sensor Data</h1>
 <table id="sensorTable" class="display responsive nowrap" style="width:100%">
     <thead>
         <tr>
@@ -97,7 +96,7 @@
                 order: [[1, 'asc']], // Sort by the second column (Name) in ascending order
                 responsive: true, // Enable responsive extension
                 fixedHeader: true, // Enable fixed header
-                rowCallback: function(row, data, index) {
+                createdRow: function(row, data, dataIndex) {
                     const now = new Date();
                     const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
 
@@ -106,18 +105,6 @@
                         // Apply the style to the row
                         $(row).css('background-color', '#f8d7da');
                     }
-                },
-                drawCallback: function(settings) {
-                    // Ensure that the rowCallback function is applied after sorting
-                    this.api().rows().every(function(rowIdx, tableLoop, rowLoop) {
-                        const rowData = this.data();
-                        const now = new Date();
-                        const halfHour = 30 * 60 * 1000;
-
-                        if (now - rowData.last_seen_date > halfHour) {
-                            $(this.node()).css('background-color', '#f8d7da');
-                        }
-                    });
                 }
             });
         })
