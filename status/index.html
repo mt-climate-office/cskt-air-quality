@@ -15,7 +15,7 @@
 
     <style>
         .highlight-red {
-            background-color: #f8d7da; /* Light red background */
+            background-color: #f8d7da !important; /* Light red background */
         }
     </style>
     
@@ -97,7 +97,8 @@
                     if (now - data.last_seen_date > halfHour) {
                       console.log('Highlighting row:', data.sensor_index);
                       console.log('Difference:', now - data.last_seen_date);
-                        $(row).css('background-color', '#f8d7da');
+                        $(row).addClass('highlight-red');
+                        //$(row).css('background-color', '#f8d7da');
                     }
                 }
             });
