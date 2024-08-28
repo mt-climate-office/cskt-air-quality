@@ -26,9 +26,6 @@
             margin: 0;
             font-family: 'Open Sans', sans-serif;
         }
-        #sensorTable_wrapper {
-            height: calc(100vh - 150px); /* Adjust the value to fit your header/footer or other elements */
-        }
         table.dataTable {
             font-family: 'Open Sans', sans-serif;
         }
@@ -39,7 +36,7 @@
 </head>
 <body>
 
-<table id="sensorTable" class="display responsive nowrap" style="width:100%">
+<table id="sensorTable" class="display responsive nowrap" style="width:100%; height:100vh; overflow-y:auto;">
     <thead>
         <tr>
             <th>ID</th>
@@ -99,29 +96,25 @@
                 order: [[1, 'asc']], // Sort by the second column (Name) in ascending order
                 responsive: true, // Enable responsive extension
                 fixedHeader: true, // Enable fixed header
-                createdRow: function(row, data, dataIndex) {
-                    // Initial highlight during table creation
-                    applyHighlight(row, data);
-                },
                 drawCallback: function(settings) {
-                    // Reapply highlighting after each draw (sort, filter, etc.)
-                    $('#sensorTable tbody tr').each(function() {
-                        var rowData = $('#sensorTable').DataTable().row(this).data();
-                        applyHighlight(this, rowData);
+                    // Apply highlighting after each draw event
+                    const now = new Date();
+                    const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+                    // Iterate through each row and apply highlighting if needed
+                    this.api().rows().every(function() {
+                        const row = this.node();
+                        const rowData = this.data();
+                        const lastSeenDate = new Date(rowData.last_seen_date);
+
+                        if (now - lastSeenDate > halfHour) {
+                            $(row).addClass('highlight');
+                        } else {
+                            $(row).removeClass('highlight');
+                        }
                     });
                 }
             });
-
-            function applyHighlight(row, data) {
-                const now = new Date();
-                const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
-
-                if (now - new Date(data.last_seen_date) > halfHour) {
-                    $(row).addClass('highlight');
-                } else {
-                    $(row).removeClass('highlight');
-                }
-            }
         })
         .catch(error => console.error('Error fetching sensor data:', error));
     });
