@@ -1,50 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Data</title>
     
+    <!-- Include Open Sans from Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap">
+
+    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.2/css/fixedHeader.dataTables.min.css">
-    
+
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.2.2/js/dataTables.fixedHeader.min.js"></script>
 
     <style>
-    
-        body {
-            font: 90%/1.45em "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif !important;
+        body, html {
+            height: 100%;
             margin: 0;
-            padding: 0;
-            color: #333;
-            background-color: #fff;
-            position: relative;
-            padding-bottom: 220px !important;
-            height: auto !important;
-            min-height: 100%;
-            box-sizing: border-box;
-            -webkit-font-smoothing: inherit
+            font-family: 'Open Sans', sans-serif;
         }
-
-        .table,
-        #myTable {
-            width: 100vw;
+        #sensorTable_wrapper {
+            height: calc(100vh - 150px); /* Adjust the value to fit your header/footer or other elements */
         }
-        .highlight-red {
-            background-color: #f8d7da !important; /* Light red background */
+        table.dataTable {
+            font-family: 'Open Sans', sans-serif;
         }
     </style>
-    
 </head>
 <body>
 
 <h1>Sensor Data</h1>
-<table id="sensorTable" class="display" style="width:100%">
+<table id="sensorTable" class="display responsive nowrap" style="width:100%">
     <thead>
         <tr>
             <th>ID</th>
@@ -67,7 +60,6 @@
         fetch('https://c36nxc3vd0.execute-api.us-west-2.amazonaws.com/prod/sensor-data')
         .then(response => response.json())
         .then(data => {
-            // Map API response data to table format
             const tableData = data.data.map(sensor => {
                 const lastSeenDate = new Date(sensor[1] * 1000); // Assuming the timestamp is in seconds
                 return {
@@ -87,14 +79,6 @@
 
             $('#sensorTable').DataTable({
                 data: tableData,
-                //order: [[1, 'asc']], // Sort by the second column (Name) in ascending order
-                responsive: true,
-                fixedHeader: true,
-                paging: false,
-                info: false,
-                language: {
-                        search: ''
-                    },
                 columns: [
                     { data: 'sensor_index' },
                     { data: 'name' },
@@ -107,6 +91,12 @@
                     { data: 'last_seen' },
                     { data: 'pm25' }
                 ],
+                scrollY: 'calc(100vh - 200px)', // Adjust this based on your layout
+                scrollCollapse: true,
+                paging: false,
+                order: [[1, 'asc']], // Sort by the second column (Name) in ascending order
+                responsive: true, // Enable responsive extension
+                fixedHeader: true, // Enable fixed header
                 rowCallback: function(row, data, index) {
                     const now = new Date();
                     const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
