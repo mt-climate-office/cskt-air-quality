@@ -106,9 +106,13 @@
                 //scrollY: 'calc(100vh - 200px)', // Adjust this based on your layout
                 scrollCollapse: true,
                 paging: false,
+                info: false,
                 order: [[1, 'asc']], // Sort by the second column (Name) in ascending order
                 responsive: true, // Enable responsive extension
                 fixedHeader: true, // Enable fixed header
+                language: {
+                        search: ''
+                    },
                 drawCallback: function(settings) {
                     // Apply highlighting after each draw event
                     const now = new Date();
@@ -128,6 +132,8 @@
                     });
                 }
             });
+            
+            
         })
         .catch(error => console.error('Error fetching sensor data:', error));
     });
