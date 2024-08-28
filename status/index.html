@@ -32,6 +32,9 @@
         table.dataTable {
             font-family: 'Open Sans', sans-serif;
         }
+        .highlight {
+            background-color: #f8d7da;
+        }
     </style>
 </head>
 <body>
@@ -97,16 +100,28 @@
                 responsive: true, // Enable responsive extension
                 fixedHeader: true, // Enable fixed header
                 createdRow: function(row, data, dataIndex) {
-                    const now = new Date();
-                    const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
-
-                    // Check if the sensor hasn't reported in the last 30 minutes
-                    if (now - data.last_seen_date > halfHour) {
-                        // Apply the style to the row
-                        $(row).css('background-color', '#f8d7da');
-                    }
+                    // Initial highlight during table creation
+                    applyHighlight(row, data);
+                },
+                drawCallback: function(settings) {
+                    // Reapply highlighting after each draw (sort, filter, etc.)
+                    $('#sensorTable tbody tr').each(function() {
+                        var rowData = $('#sensorTable').DataTable().row(this).data();
+                        applyHighlight(this, rowData);
+                    });
                 }
             });
+
+            function applyHighlight(row, data) {
+                const now = new Date();
+                const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+                if (now - new Date(data.last_seen_date) > halfHour) {
+                    $(row).addClass('highlight');
+                } else {
+                    $(row).removeClass('highlight');
+                }
+            }
         })
         .catch(error => console.error('Error fetching sensor data:', error));
     });
