@@ -161,7 +161,7 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
                 };
             });
 
-           var tab =  $('#sensorTable')
+           $('#sensorTable')
                 .DataTable({
                 data: tableData,
                 columns: [
@@ -228,11 +228,6 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
                     });
                }
             });
-            
-            tab.on('draw', function () {
-              setTimeout(function() {
-                tab.fixedHeader.adjust();
-              }, 0);
 
   });
             
