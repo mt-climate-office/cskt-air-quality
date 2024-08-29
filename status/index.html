@@ -176,6 +176,12 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
                     { data: 'firmware_version' },
                     { data: 'sensor_index' }
                 ],
+                columnDefs: [
+                  {
+                    targets: 0,
+                    className: 'dt-center'
+                  }
+                  ],
                 //scrollY: 'calc(100vh - 200px)', // Adjust this based on your layout
                 scrollCollapse: true,
                 paging: false,
