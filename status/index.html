@@ -43,8 +43,11 @@
         .highlight-text {
             color: #d9534f !important; /* Red color for text */
         }
-        .highlight {
-            background-color: #f8d7da !important;
+        .aqi-good {
+            background-color: rgba(146, 255, 127, 1) !important;
+        }
+        .aqi-acceptable {
+            background-color: rgba(254,191,12,1.0) !important;
         }
     </style>
 </head>
@@ -182,11 +185,11 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
                         const aqi = rowData.aqi;
                         const aqiCell = $(row).find('td').eq(9); // Last Seen column index
 
-    /*                    if (aqi <= 50) {
-                            aqiCell.addClass('highlight-text');
-                        } else {
-                            lastSeenCell.removeClass('highlight-text');
-                        }*/
+                        if (aqi <= 50) {
+                            aqiCell.addClass('aqi-good');
+                        } else if (aqi <= 100) {
+                            aqiCell.addClass('aqi-acceptable');
+                        }
                         
                     });
                }
