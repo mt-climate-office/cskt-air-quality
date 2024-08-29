@@ -75,8 +75,8 @@
 </head>
 <body>
 
-<table id="sensorTable" class="display responsive nowrap" style="width:100%; height:100vh; overflow-y:auto;">
-    <thead>
+<table id="sensorTable" class="display responsive nowrap compact" style="width:100%; height:100vh; overflow-y:auto;">
+    <thead style="position: sticky">
         <tr>
             <th class="all">AQI</th>
             <th class="all">Location</th>
@@ -188,7 +188,7 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
                 info: false,
                 order: [[1, 'asc']], // Sort by the second column (Name) in ascending order
                 responsive: true, // Enable responsive extension
-                fixedHeader: true, // Enable fixed header
+                //fixedHeader: true, // Enable fixed header
                 searching: false,
                 drawCallback: function(settings) {
                     // Apply text color after each draw event
