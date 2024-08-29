@@ -37,11 +37,14 @@
         table.dataTable {
             font-family: 'Open Sans', sans-serif;
         }
-        .highlight {
-            background-color: #f8d7da !important;
-        }
         .dataTables_filter {
             float: left !important;
+        }
+        .highlight-text {
+            color: #d9534f !important; /* Red color for text */
+        }
+        .highlight {
+            background-color: #f8d7da !important;
         }
     </style>
 </head>
@@ -118,23 +121,24 @@
                         search: ''
                     },
                 drawCallback: function(settings) {
-                    // Apply highlighting after each draw event
+                    // Apply text color after each draw event
                     const now = new Date();
                     const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-                    // Iterate through each row and apply highlighting if needed
+                    // Iterate through each row and apply text color if needed
                     this.api().rows().every(function() {
                         const row = this.node();
                         const rowData = this.data();
                         const lastSeenDate = new Date(rowData.last_seen_date);
+                        const lastSeenCell = $(row).find('td').eq(8); // Last Seen column index
 
                         if (now - lastSeenDate > halfHour) {
-                            $(row).addClass('highlight');
+                            lastSeenCell.addClass('highlight-text');
                         } else {
-                            $(row).removeClass('highlight');
+                            lastSeenCell.removeClass('highlight-text');
                         }
                     });
-                }
+               }
             });
             
             
