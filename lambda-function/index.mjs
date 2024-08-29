@@ -11,7 +11,7 @@ export const handler = async (event) => {
             "model",
             "firmware_version",
             "last_seen",
-            "pm2.5"
+            "pm2.5_10minute"
         ];
     const show_only = [
             190203, 190189, 176181, 176173, 176203, 176155, 190325, 190197, 
