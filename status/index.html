@@ -75,7 +75,7 @@
 </head>
 <body>
 
-<table id="sensorTable" class="display responsive nowrap" style="width:100%; height:100vh; overflow-y:auto;">
+<table id="sensorTable" class="display responsive nowrap compact" style="width:100%; height:100vh; overflow-y:auto;">
     <thead>
         <tr>
             <th>AQI</th>
@@ -162,7 +162,6 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
             });
 
             $('#sensorTable')
-                .addClass('nowrap')
                 .DataTable({
                 data: tableData,
                 columns: [
