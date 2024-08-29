@@ -62,13 +62,54 @@
             <th>Model</th>
             <th>Firmware Version</th>
             <th>Last Seen</th>
-            <th>PM2.5</th>
+            <th>US EPA AQI</th>
         </tr>
     </thead>
     <tbody></tbody>
 </table>
 
 <script>
+
+function aqiFromPM(pm) {
+    if (isNaN(pm)) return "-"; 
+    if (pm == undefined) return "-";
+    if (pm < 0) return pm; 
+    if (pm > 1000) return "-"; 
+    /*                                  AQI         RAW PM2.5
+    Good                               0 - 50   |   0.0 – 12.0
+    Moderate                          51 - 100  |  12.1 – 35.4
+    Unhealthy for Sensitive Groups   101 – 150  |  35.5 – 55.4
+    Unhealthy                        151 – 200  |  55.5 – 150.4
+    Very Unhealthy                   201 – 300  |  150.5 – 250.4
+    Hazardous                        301 – 400  |  250.5 – 350.4
+    Hazardous                        401 – 500  |  350.5 – 500.4
+    */
+    if (pm > 350.5) {
+        return calcAQI(pm, 500, 401, 500.4, 350.5); //Hazardous
+    } else if (pm > 250.5) {
+        return calcAQI(pm, 400, 301, 350.4, 250.5); //Hazardous
+    } else if (pm > 150.5) {
+        return calcAQI(pm, 300, 201, 250.4, 150.5); //Very Unhealthy
+    } else if (pm > 55.5) {
+        return calcAQI(pm, 200, 151, 150.4, 55.5); //Unhealthy
+    } else if (pm > 35.5) {
+        return calcAQI(pm, 150, 101, 55.4, 35.5); //Unhealthy for Sensitive Groups
+    } else if (pm > 12.1) {
+        return calcAQI(pm, 100, 51, 35.4, 12.1); //Moderate
+    } else if (pm >= 0) {
+        return calcAQI(pm, 50, 0, 12, 0); //Good
+    } else {
+        return undefined;
+    }
+}
+
+function calcAQI(Cp, Ih, Il, BPh, BPl) {
+    var a = (Ih - Il);
+    var b = (BPh - BPl);
+    var c = (Cp - BPl);
+    return Math.round((a/b) * c + Il);
+}
+
     document.addEventListener('DOMContentLoaded', function () {
         fetch('https://c36nxc3vd0.execute-api.us-west-2.amazonaws.com/prod/sensor-data')
         .then(response => response.json())
@@ -89,7 +130,7 @@
                     latitude: sensor[6],
                     longitude: sensor[7],
                     altitude: sensor[8],
-                    pm25: sensor[9],
+                    aqi: aqiFromPM(sensor[9]),
                     last_seen_date: lastSeenDate // Raw date object for comparison
                 };
             });
@@ -108,7 +149,7 @@
                     { data: 'model' },
                     { data: 'firmware_version' },
                     { data: 'last_seen' },
-                    { data: 'pm25' }
+                    { data: 'aqi' }
                 ],
                 //scrollY: 'calc(100vh - 200px)', // Adjust this based on your layout
                 scrollCollapse: true,
@@ -137,6 +178,16 @@
                         } else {
                             lastSeenCell.removeClass('highlight-text');
                         }
+                        
+                        const aqi = rowData.aqi;
+                        const aqiCell = $(row).find('td').eq(9); // Last Seen column index
+
+    /*                    if (aqi <= 50) {
+                            aqiCell.addClass('highlight-text');
+                        } else {
+                            lastSeenCell.removeClass('highlight-text');
+                        }*/
+                        
                     });
                }
             });
