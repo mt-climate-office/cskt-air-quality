@@ -78,16 +78,17 @@
 <table id="sensorTable" class="display responsive nowrap" style="width:100%; height:100vh; overflow-y:auto;">
     <thead>
         <tr>
-            <th>ID</th>
+            <th>US EPA AQI</th>
             <th>Name</th>
+            <th>Last Seen</th>
             <th>Location Type</th>
             <th>Latitude</th>
             <th>Longitude</th>
             <th>Altitude</th>
             <th>Model</th>
             <th>Firmware Version</th>
-            <th>Last Seen</th>
-            <th>US EPA AQI</th>
+            <th>ID</th>
+            
         </tr>
     </thead>
     <tbody></tbody>
@@ -165,16 +166,16 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
                 .DataTable({
                 data: tableData,
                 columns: [
-                    { data: 'sensor_index' },
+                    { data: 'aqi' },
                     { data: 'name' },
+                    { data: 'last_seen' },
                     { data: 'location_type' },
                     { data: 'latitude' },
                     { data: 'longitude' },
                     { data: 'altitude' },
                     { data: 'model' },
                     { data: 'firmware_version' },
-                    { data: 'last_seen' },
-                    { data: 'aqi' }
+                    { data: 'sensor_index' }
                 ],
                 //scrollY: 'calc(100vh - 200px)', // Adjust this based on your layout
                 scrollCollapse: true,
@@ -194,7 +195,7 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
                         const row = this.node();
                         const rowData = this.data();
                         const lastSeenDate = new Date(rowData.last_seen_date);
-                        const lastSeenCell = $(row).find('td').eq(8); // Last Seen column index
+                        const lastSeenCell = $(row).find('td').eq(2); // Last Seen column index
 
                         if (now - lastSeenDate > halfHour) {
                             lastSeenCell.addClass('highlight-text');
@@ -203,7 +204,7 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
                         }
                         
                         const aqi = rowData.aqi;
-                        const aqiCell = $(row).find('td').eq(9); // Last Seen column index
+                        const aqiCell = $(row).find('td').eq(0); // Last Seen column index
 
                         if (aqi <= 50) {
                             aqiCell.addClass('aqi-good');
