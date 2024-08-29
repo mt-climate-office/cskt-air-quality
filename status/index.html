@@ -183,9 +183,7 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
                 order: [[1, 'asc']], // Sort by the second column (Name) in ascending order
                 responsive: true, // Enable responsive extension
                 fixedHeader: true, // Enable fixed header
-                language: {
-                        search: ''
-                    },
+                searching: false,
                 drawCallback: function(settings) {
                     // Apply text color after each draw event
                     const now = new Date();
