@@ -43,11 +43,33 @@
         .highlight-text {
             color: #d9534f !important; /* Red color for text */
         }
+            /*                                  AQI         RAW PM2.5
+    Good                               0 - 50   |   0.0 – 12.0
+    Moderate                          51 - 100  |  12.1 – 35.4
+    Unhealthy for Sensitive Groups   101 – 150  |  35.5 – 55.4
+    Unhealthy                        151 – 200  |  55.5 – 150.4
+    Very Unhealthy                   201 – 300  |  150.5 – 250.4
+    Hazardous                        301 – 400  |  250.5 – 350.4
+    Hazardous                        401 – 500  |  350.5 – 500.4
+    */
+        
         .aqi-good {
             background-color: rgba(146, 255, 127, 1) !important;
         }
-        .aqi-acceptable {
+        .aqi-moderate {
             background-color: rgba(254,191,12,1.0) !important;
+        }
+        .aqi-sensitive {
+            background-color: rgba(252,109,11,1.0) !important;
+        }
+        .aqi-unhealthy {
+            background-color: rgba(233,0,6,1.0) !important;
+        }
+        .aqi-very-unhealthy {
+            background-color: rgba(116,0,133,1.0) !important;
+        }
+        .aqi-hazardous {
+            background-color: rgba(80,0,17,1.0) !important;
         }
     </style>
 </head>
@@ -188,7 +210,15 @@ function calcAQI(Cp, Ih, Il, BPh, BPl) {
                         if (aqi <= 50) {
                             aqiCell.addClass('aqi-good');
                         } else if (aqi <= 100) {
-                            aqiCell.addClass('aqi-acceptable');
+                            aqiCell.addClass('aqi-moderate');
+                        } else if (aqi <= 150) {
+                            aqiCell.addClass('aqi-sensitive');
+                        } else if (aqi <= 200) {
+                            aqiCell.addClass('aqi-unhealthy');
+                        } else if (aqi <= 300) {
+                            aqiCell.addClass('aqi-very-unhealthy');
+                        } else {
+                            aqiCell.addClass('aqi-hazardous');
                         }
                         
                     });
