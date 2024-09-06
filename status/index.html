@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sensor Data</title>
-    
+
     <!-- Include Open Sans from Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap">
 
@@ -21,7 +22,8 @@
     <script src="https://cdn.datatables.net/fixedheader/3.2.2/js/dataTables.fixedHeader.min.js"></script>
 
     <style>
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             color: #333;
@@ -34,16 +36,21 @@
             -webkit-font-smoothing: inherit;
             font-family: 'Open Sans', sans-serif;
         }
+
         table.dataTable {
             font-family: 'Open Sans', sans-serif;
         }
+
         .dataTables_filter {
             float: left !important;
         }
+
         .highlight-text {
-            color: #d9534f !important; /* Red color for text */
+            color: #d9534f !important;
+            /* Red color for text */
         }
-            /*                                  AQI         RAW PM2.5
+
+        /*                                  AQI         RAW PM2.5
     Good                               0 - 50   |   0.0 – 12.0
     Moderate                          51 - 100  |  12.1 – 35.4
     Unhealthy for Sensitive Groups   101 – 150  |  35.5 – 55.4
@@ -52,190 +59,245 @@
     Hazardous                        301 – 400  |  250.5 – 350.4
     Hazardous                        401 – 500  |  350.5 – 500.4
     */
-        
+
         .aqi-good {
             background-color: rgba(146, 255, 127, 1) !important;
         }
+
         .aqi-moderate {
-            background-color: rgba(254,191,12,1.0) !important;
+            background-color: rgba(254, 191, 12, 1.0) !important;
         }
+
         .aqi-sensitive {
-            background-color: rgba(252,109,11,1.0) !important;
+            background-color: rgba(252, 109, 11, 1.0) !important;
         }
+
         .aqi-unhealthy {
-            background-color: rgba(233,0,6,1.0) !important;
+            background-color: rgba(233, 0, 6, 1.0) !important;
         }
+
         .aqi-very-unhealthy {
-            background-color: rgba(116,0,133,1.0) !important;
+            background-color: rgba(116, 0, 133, 1.0) !important;
         }
+
         .aqi-hazardous {
-            background-color: rgba(80,0,17,1.0) !important;
+            background-color: rgba(80, 0, 17, 1.0) !important;
         }
+
         .dtfh-floatingparent .dtfh-floatingparenthead {
-          overflow: visible;
+            overflow: visible;
         }
     </style>
 </head>
+
 <body>
 
-<table id="sensorTable" class="display responsive nowrap compact" style="width:100%; height:100vh; overflow-y:auto;">
-    <thead>
-        <tr>
-            <th class="all">AQI</th>
-            <th class="all">Location</th>
-            <th>Last Report</th>
-            <th>Setting</th>
-            <th>Lat.</th>
-            <th>Long.</th>
-            <th>Elev.</th>
-            <th>Model</th>
-            <th>FW</th>
-            <th>ID</th>
-            
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+    <table id="sensorTable" class="display responsive nowrap compact" style="width:100%; height:100vh; overflow-y:auto;">
+        <thead>
+            <tr>
+                <th class="all">AQI</th>
+                <th class="all">Location</th>
+                <th>Last Report</th>
+                <th>Setting</th>
+                <th>Lat.</th>
+                <th>Long.</th>
+                <th>Elev.</th>
+                <th>Model</th>
+                <th>FW</th>
+                <th>ID</th>
 
-<script>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
-function aqiFromPM(pm) {
-    if (isNaN(pm)) return "-"; 
-    if (pm == undefined) return "-";
-    if (pm < 0) return pm; 
-    if (pm > 1000) return "-"; 
-    /*                                  AQI         RAW PM2.5
-    Good                               0 - 50   |   0.0 – 12.0
-    Moderate                          51 - 100  |  12.1 – 35.4
-    Unhealthy for Sensitive Groups   101 – 150  |  35.5 – 55.4
-    Unhealthy                        151 – 200  |  55.5 – 150.4
-    Very Unhealthy                   201 – 300  |  150.5 – 250.4
-    Hazardous                        301 – 400  |  250.5 – 350.4
-    Hazardous                        401 – 500  |  350.5 – 500.4
-    */
-    if (pm > 350.5) {
-        return calcAQI(pm, 500, 401, 500.4, 350.5); //Hazardous
-    } else if (pm > 250.5) {
-        return calcAQI(pm, 400, 301, 350.4, 250.5); //Hazardous
-    } else if (pm > 150.5) {
-        return calcAQI(pm, 300, 201, 250.4, 150.5); //Very Unhealthy
-    } else if (pm > 55.5) {
-        return calcAQI(pm, 200, 151, 150.4, 55.5); //Unhealthy
-    } else if (pm > 35.5) {
-        return calcAQI(pm, 150, 101, 55.4, 35.5); //Unhealthy for Sensitive Groups
-    } else if (pm > 12.1) {
-        return calcAQI(pm, 100, 51, 35.4, 12.1); //Moderate
-    } else if (pm >= 0) {
-        return calcAQI(pm, 50, 0, 12, 0); //Good
-    } else {
-        return undefined;
-    }
-}
+    <script>
+        function aqiFromPM(pm) {
+            if (isNaN(pm)) return "-";
+            if (pm == undefined) return "-";
+            if (pm < 0) return pm;
+            if (pm > 1000) return "-";
+            /*                                  AQI         RAW PM2.5
+            Good                               0 - 50   |   0.0 – 12.0
+            Moderate                          51 - 100  |  12.1 – 35.4
+            Unhealthy for Sensitive Groups   101 – 150  |  35.5 – 55.4
+            Unhealthy                        151 – 200  |  55.5 – 150.4
+            Very Unhealthy                   201 – 300  |  150.5 – 250.4
+            Hazardous                        301 – 400  |  250.5 – 350.4
+            Hazardous                        401 – 500  |  350.5 – 500.4
+            */
+            if (pm > 350.5) {
+                return calcAQI(pm, 500, 401, 500.4, 350.5); //Hazardous
+            } else if (pm > 250.5) {
+                return calcAQI(pm, 400, 301, 350.4, 250.5); //Hazardous
+            } else if (pm > 150.5) {
+                return calcAQI(pm, 300, 201, 250.4, 150.5); //Very Unhealthy
+            } else if (pm > 55.5) {
+                return calcAQI(pm, 200, 151, 150.4, 55.5); //Unhealthy
+            } else if (pm > 35.5) {
+                return calcAQI(pm, 150, 101, 55.4, 35.5); //Unhealthy for Sensitive Groups
+            } else if (pm > 12.1) {
+                return calcAQI(pm, 100, 51, 35.4, 12.1); //Moderate
+            } else if (pm >= 0) {
+                return calcAQI(pm, 50, 0, 12, 0); //Good
+            } else {
+                return undefined;
+            }
+        }
 
-function calcAQI(Cp, Ih, Il, BPh, BPl) {
-    var a = (Ih - Il);
-    var b = (BPh - BPl);
-    var c = (Cp - BPl);
-    return Math.round((a/b) * c + Il);
-}
+        function calcAQI(Cp, Ih, Il, BPh, BPl) {
+            var a = (Ih - Il);
+            var b = (BPh - BPl);
+            var c = (Cp - BPl);
+            return Math.round((a / b) * c + Il);
+        }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        fetch('https://c36nxc3vd0.execute-api.us-west-2.amazonaws.com/prod/sensor-data')
-        .then(response => response.json())
-        .then(data => {
-            const tableData = data.data.map(sensor => {
-                const lastSeenDate = new Date(sensor[1] * 1000); // Assuming the timestamp is in seconds
-                return {
-                    sensor_index: sensor[0],
-                    last_seen: lastSeenDate.toLocaleString("en-US", { timeZone: "America/Denver" }),
-                    name: "<a href='https://map.purpleair.com/1/b/lt/mAQI/a10/p0/cC0?select="
-                    .concat(sensor[0])
-                    .concat("#8.6/47.5061/-114.347' target='_blank'>")
-                    .concat(sensor[2])
-                    .concat("</a>"),
-                    location_type: sensor[3] === 0 ? "outside" : "inside",
-                    model: sensor[4],
-                    firmware_version: sensor[5],
-                    latitude: sensor[6],
-                    longitude: sensor[7],
-                    altitude: sensor[8],
-                    aqi: aqiFromPM(sensor[9]),
-                    last_seen_date: lastSeenDate // Raw date object for comparison
-                };
-            });
+        function getNonUM(x) {
+            var out;
+            switch (x) {
+                case "DEQ018":
+                    out = 'CSKT — Arlee High School ("DEQ018")';
+                    break;
+                case "Arlee HS":
+                    out = 'CSKT — Arlee High School (Classroom) ("Arlee HS")';
+                    break;
+                case "Hot Springs School District":
+                    out = 'CSKT — Hot Springs High School ("Hot Springs School District")';
+                    break;
+                case "CSKT-Polson Middle School":
+                    out = 'CSKT — Polson Middle School ("CSKT-Polson Middle School")';
+                    break;
+                case "Ronan, MT":
+                    out = 'CSKT — Ronan High School ("Ronan, MT")';
+                    break;
+                case 5:
+                    out = 'CSKT — St. Ignatius High School ("St. Ignatius High School")';
+                    break;
+                default:
+                    out = x;
+            }
+            return out;
+        }
 
-           $('#sensorTable')
-                .DataTable({
-                data: tableData,
-                columns: [
-                    { data: 'aqi' },
-                    { data: 'name' },
-                    { data: 'last_seen' },
-                    { data: 'location_type' },
-                    { data: 'latitude' },
-                    { data: 'longitude' },
-                    { data: 'altitude' },
-                    { data: 'model' },
-                    { data: 'firmware_version' },
-                    { data: 'sensor_index' }
-                ],
-                columnDefs: [
-                  {
-                    targets: 0,
-                    className: 'dt-center'
-                  }
-                  ],
-                //scrollY: 'calc(100vh - 200px)', // Adjust this based on your layout
-                scrollCollapse: true,
-                paging: false,
-                info: false,
-                order: [[1, 'asc']], // Sort by the second column (Name) in ascending order
-                responsive: true, // Enable responsive extension
-                fixedHeader: true, // Enable fixed header
-                searching: false,
-                drawCallback: function(settings) {
-                    // Apply text color after each draw event
-                    const now = new Date();
-                    const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
-
-                    // Iterate through each row and apply text color if needed
-                    this.api().rows().every(function() {
-                        const row = this.node();
-                        const rowData = this.data();
-                        const lastSeenDate = new Date(rowData.last_seen_date);
-                        const lastSeenCell = $(row).find('td').eq(2); // Last Seen column index
-
-                        if (now - lastSeenDate > halfHour) {
-                            lastSeenCell.addClass('highlight-text');
-                        } else {
-                            lastSeenCell.removeClass('highlight-text');
-                        }
-                        
-                        const aqi = rowData.aqi;
-                        const aqiCell = $(row).find('td').eq(0); // Last Seen column index
-
-                        if (aqi <= 50) {
-                            aqiCell.addClass('aqi-good');
-                        } else if (aqi <= 100) {
-                            aqiCell.addClass('aqi-moderate');
-                        } else if (aqi <= 150) {
-                            aqiCell.addClass('aqi-sensitive');
-                        } else if (aqi <= 200) {
-                            aqiCell.addClass('aqi-unhealthy');
-                        } else if (aqi <= 300) {
-                            aqiCell.addClass('aqi-very-unhealthy');
-                        } else {
-                            aqiCell.addClass('aqi-hazardous');
-                        }
-                        
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('https://c36nxc3vd0.execute-api.us-west-2.amazonaws.com/prod/sensor-data')
+                .then(response => response.json())
+                .then(data => {
+                    const tableData = data.data.map(sensor => {
+                        const lastSeenDate = new Date(sensor[1] * 1000); // Assuming the timestamp is in seconds
+                        return {
+                            sensor_index: sensor[0],
+                            last_seen: lastSeenDate.toLocaleString("en-US", {
+                                timeZone: "America/Denver"
+                            }),
+                            name: "<a href='https://map.purpleair.com/1/b/lt/mAQI/a10/p0/cC0?select="
+                                .concat(sensor[0])
+                                .concat("#8.6/47.5061/-114.347' target='_blank'>")
+                                .concat(getNonUM(sensor[2]))
+                                .concat("</a>"),
+                            location_type: sensor[3] === 0 ? "outside" : "inside",
+                            model: sensor[4],
+                            firmware_version: sensor[5],
+                            latitude: sensor[6],
+                            longitude: sensor[7],
+                            altitude: sensor[8],
+                            aqi: aqiFromPM(sensor[9]),
+                            last_seen_date: lastSeenDate // Raw date object for comparison
+                        };
                     });
-               }
-            });
-            
-        })
-        .catch(error => console.error('Error fetching sensor data:', error));
-    });
-</script>
+
+                    $('#sensorTable')
+                        .DataTable({
+                            data: tableData,
+                            columns: [{
+                                    data: 'aqi'
+                                },
+                                {
+                                    data: 'name'
+                                },
+                                {
+                                    data: 'last_seen'
+                                },
+                                {
+                                    data: 'location_type'
+                                },
+                                {
+                                    data: 'latitude'
+                                },
+                                {
+                                    data: 'longitude'
+                                },
+                                {
+                                    data: 'altitude'
+                                },
+                                {
+                                    data: 'model'
+                                },
+                                {
+                                    data: 'firmware_version'
+                                },
+                                {
+                                    data: 'sensor_index'
+                                }
+                            ],
+                            columnDefs: [{
+                                targets: 0,
+                                className: 'dt-center'
+                            }],
+                            //scrollY: 'calc(100vh - 200px)', // Adjust this based on your layout
+                            scrollCollapse: true,
+                            paging: false,
+                            info: false,
+                            order: [
+                                [1, 'asc']
+                            ], // Sort by the second column (Name) in ascending order
+                            responsive: true, // Enable responsive extension
+                            fixedHeader: true, // Enable fixed header
+                            searching: false,
+                            drawCallback: function(settings) {
+                                // Apply text color after each draw event
+                                const now = new Date();
+                                const halfHour = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+                                // Iterate through each row and apply text color if needed
+                                this.api().rows().every(function() {
+                                    const row = this.node();
+                                    const rowData = this.data();
+                                    const lastSeenDate = new Date(rowData.last_seen_date);
+                                    const lastSeenCell = $(row).find('td').eq(2); // Last Seen column index
+
+                                    if (now - lastSeenDate > halfHour) {
+                                        lastSeenCell.addClass('highlight-text');
+                                    } else {
+                                        lastSeenCell.removeClass('highlight-text');
+                                    }
+
+                                    const aqi = rowData.aqi;
+                                    const aqiCell = $(row).find('td').eq(0); // Last Seen column index
+
+                                    if (aqi <= 50) {
+                                        aqiCell.addClass('aqi-good');
+                                    } else if (aqi <= 100) {
+                                        aqiCell.addClass('aqi-moderate');
+                                    } else if (aqi <= 150) {
+                                        aqiCell.addClass('aqi-sensitive');
+                                    } else if (aqi <= 200) {
+                                        aqiCell.addClass('aqi-unhealthy');
+                                    } else if (aqi <= 300) {
+                                        aqiCell.addClass('aqi-very-unhealthy');
+                                    } else {
+                                        aqiCell.addClass('aqi-hazardous');
+                                    }
+
+                                });
+                            }
+                        });
+
+                })
+                .catch(error => console.error('Error fetching sensor data:', error));
+        });
+    </script>
 
 </body>
+
 </html>
