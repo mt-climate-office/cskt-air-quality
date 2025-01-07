@@ -4,8 +4,6 @@ library(magrittr)
 library(tidyverse)
 
 
-
-
 query_fields <-
   c("name",
     "location_type",
