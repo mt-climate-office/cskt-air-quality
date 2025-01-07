@@ -32,4 +32,5 @@ httr::GET("https://c36nxc3vd0.execute-api.us-west-2.amazonaws.com/prod/sensor-da
     `Registration ID` = sensor_index,
     URL = paste0("https://map.purpleair.com/1/b/lt/mAQI/a10/p0/cC0?select=", sensor_index,"#8.6/47.5061/-114.347")
   ) %>%
+  dplyr::arrange(`Station ID`) %T>%
   readr::write_csv("sensor_urls.csv")
