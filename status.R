@@ -52,14 +52,15 @@ sensors <-
     190211,
     212855,
     176183,
-    212697)
+    212697,
+    240607)
 
 httr2::request("https://api.purpleair.com") |>
   httr2::req_url_path("v1","sensors") |>
   httr2::req_url_query(fields = query_fields,
                        show_only = sensors,
                        .multi = "comma") |>
-  httr2::req_headers(`X-API-Key` = keyring::key_get("purple_air")) |>
+  httr2::req_headers(`X-API-Key` = keyring::key_get("cskt-purpleair")) |>
   httr2::req_perform() |>
   resp_body_json() %$%
   {

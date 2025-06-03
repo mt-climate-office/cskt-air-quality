@@ -2,7 +2,7 @@ library(tidyverse)
 library(magrittr)
 
 httr::GET("https://c36nxc3vd0.execute-api.us-west-2.amazonaws.com/prod/sensor-data") |>
-  httr::content() %$%
+  httr::content(type = "application/json") %$%
   data %>%
   purrr::transpose() %>%
   magrittr::set_names(c(
