@@ -26,7 +26,7 @@ httr::GET("https://c36nxc3vd0.execute-api.us-west-2.amazonaws.com/prod/sensor-da
                                      "Hot Springs School District" ~ 'CSKT — Hot Springs High School (Outside, "Hot Springs School District")',
                                      "CSKT-Polson Middle School" ~ 'CSKT — Polson Middle School (Outside, "CSKT-Polson Middle School")',
                                      "Ronan, MT" ~ 'CSKT — Ronan High School (Outside, "Ronan, MT")',
-                                     "St. Ignatius High School" ~ 'CSKT — St. Ignatius High School (Outside, "St. Ignatius High School")',
+                                     # "St. Ignatius High School" ~ 'CSKT — St. Ignatius High School (Outside, "St. Ignatius High School")',
                                      .default = name
     )  ,
     `Registration ID` = sensor_index,
