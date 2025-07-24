@@ -24,7 +24,7 @@ async function getSensorIDsFromAirtable() {
 
     const data = await response.json();
     return data.records
-        .map(record => record.fields['ID'])
+        .map(record => record.fields['Sensor Index'])
         .filter(id => typeof id === 'number');  // Ensure only numeric IDs
 }
 
