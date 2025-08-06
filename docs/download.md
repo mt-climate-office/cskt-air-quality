@@ -1,8 +1,4 @@
----
-title: "Download Daily US EPA PM<sub>2.5</sub> AQI Data for a PurpleAir Sensor"
-layout: default
----
-
+# Download Daily US EPA PM<sub>2.5</sub> AQI Data for a PurpleAir Sensor
 
 This guide shows how to configure PurpleAir map settings, select your sensor, and export daily AQI data as CSV.
 
