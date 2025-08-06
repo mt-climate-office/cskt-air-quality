@@ -23,13 +23,14 @@ This guide shows how to configure PurpleAir map settings, select your sensor, an
 
 1. Visit: [https://map.purpleair.com](https://map.purpleair.com), or select a sensor from [https://mt-climate-office.github.io/cskt-air-quality/](https://mt-climate-office.github.io/cskt-air-quality/).
 2. Click the **gear icon** (⚙) at the top‑left to open the configuration menu.  
-![Configuration Menu Screenshot](./configure.png) 
 3. Set your map options:
    - **Data layer** → `US EPA PM2.5 (AQI)`
    - **Apply conversion** → `US EPA`
    - **Averaging period** → `1‑day`
 
 ***Note:*** *Data can be downloaded for shorter averaging periods (e.g., 15-minute), but shorter averaging periods will download shorter timeseries. `1-day` will download a year of data.*
+
+![Configuration Menu Screenshot](./configure.png) 
 
 ---
 
