@@ -1,4 +1,8 @@
-# Download Daily US EPA PM<sub>2.5</sub> AQI Data for a PurpleAir Sensor
+---
+title: "Download Daily US EPA PM<sub>2.5</sub> AQI Data for a PurpleAir Sensor"
+layout: default
+---
+
 
 This guide shows how to configure PurpleAir map settings, select your sensor, and export daily AQI data as CSV.
 
@@ -63,7 +67,7 @@ Each downloaded file includes:
 
 ---
 
-## 📋 Steps Summary
+## Steps Summary
 
 | Step | Action |
 |------|--------|
@@ -77,7 +81,7 @@ Each downloaded file includes:
 
 ---
 
-### ℹ️ Tips & Limitations
+### Tips & Limitations
 
 - **Graph CSV downloads** are limited by the averaging period:
   - **1‑day average** → maximum ~1 year
