@@ -1,5 +1,6 @@
 ---
 title: "Download Daily US EPA PM<sub>2.5</sub> AQI Data for a PurpleAir Sensor"
+page_title: "Download PurpleAir Data"
 description: "Instructions for downloading and using EPA AQI data from PurpleAir."
 layout: default
 permalink: /docs/download/

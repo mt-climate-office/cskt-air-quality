@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>{{ page.title | default: site.title }}</title>
+  <title>{{ page.page_title | default: page.title | default: site.title }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% if page.description %}
     <meta name="description" content="{{ page.description }}">
