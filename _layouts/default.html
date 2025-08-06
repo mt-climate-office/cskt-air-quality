@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ page.title | default: site.title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if page.description %}
+    <meta name="description" content="{{ page.description }}">
+  {% endif %}
+  <style>
+    body {
+      max-width: 800px;
+      margin: 2rem auto;
+      font-family: sans-serif;
+      line-height: 1.6;
+      padding: 0 1rem;
+    }
+    header, footer {
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>{{ page.title | default: site.title }}</h1>
+  </header>
+
+  <main>
+    {{ content }}
+  </main>
+
+  <footer>
+    <p>© {{ site.title | default: "My Site" }} {{ site.time | date: "%Y" }}</p>
+  </footer>
+</body>
+</html>
